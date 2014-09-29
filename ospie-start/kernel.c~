@@ -25,6 +25,7 @@ return volume;
 
 
 #include "sched.h"
+#include "dispatcher.h"
 
 struct ctx_s ctx_ping;
 struct ctx_s ctx_pong;
