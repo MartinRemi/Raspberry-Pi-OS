@@ -33,7 +33,7 @@ void __attribute__ ((naked)) switch_to(struct ctx_s* ctx) {
 }
 
 void init_pcb(struct pcb_s* pcb, func_t f, unsigned int stack_size, void* args) {
-	pcb->ctx = malloc(sizeof(struct ctx_s));
+	pcb->ctx = phyAlloc_alloc(sizeof(struct ctx_s));
 	init_ctx(pcb->ctx, f, stack_size);
 	pcb->size = stack_size;
 	pcb->args = args;
@@ -41,7 +41,7 @@ void init_pcb(struct pcb_s* pcb, func_t f, unsigned int stack_size, void* args) 
 }
 
 void create_process(func_t f, void* args, unsigned int stack_size) {
-	struct pcb_s* pcb = malloc(sizeof(struct pcb_s));
+	struct pcb_s* pcb = phyAlloc_alloc(sizeof(struct pcb_s));
 	if(first == NULL) {
 		first = pcb;
 		last = pcb;
@@ -53,13 +53,33 @@ void create_process(func_t f, void* args, unsigned int stack_size) {
 }
 
 void start_current_process() {
-	current_process->ctx->f();
+	current_process->ctx->f(current_process->args);
 }
 
 void elect() {
-	current_process = current_process->next;
+	if(current_process != NULL) {
+		current_process = current_process->next;
+	} else {
+		current_process = first;
+	}
 }
 
-void start_schedule() {
+void start_sched() {
+}
 
+void __attribute__ ((naked)) ctx_switch() {
+	// Sauvegarde du contexte du current_process
+	if(current_process != NULL) {
+		__asm("mov %0, sp" : "=r"(current_process->ctx->sp));
+		__asm("mov %0, lr" : "=r"(current_process->ctx->link_register));
+	}
+
+	// Demande au scheduler d'élire un nouveau processus
+	elect();
+
+	// Restaure le contexte du processus elu
+	if(current_process != NULL) {
+		__asm("mov sp, %0" : : "r"(current_process->ctx->sp));
+		__asm("mov lr, %0" : : "r"(current_process->ctx->link_register));
+	}
 }

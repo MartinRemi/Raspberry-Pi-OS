@@ -1,5 +1,5 @@
-#ifndef HW_H
-#define HW_H
+#ifndef SCHED_H
+#define SCHED_H
 
 #include "types.h"
 
@@ -7,7 +7,7 @@
 #define NULL 0
 #define STACK_SIZE (2 * sizeof(uint32) + EXTRA_SPACE)
 
-typedef void (*func_t) (void);
+typedef void (*func_t) (void*);
 
 struct ctx_s {
 	uint32* sp;
@@ -42,6 +42,8 @@ void start_current_process();
 
 void elect();
 
-void start_schedule();
+void start_sched();
+
+void __attribute__ ((naked)) ctx_switch();
 
 #endif

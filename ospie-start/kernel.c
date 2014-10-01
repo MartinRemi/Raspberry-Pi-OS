@@ -1,4 +1,5 @@
 #include "sched.h"
+#include "hw.h"
 
 void funcA()
 {
