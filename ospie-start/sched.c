@@ -7,6 +7,9 @@ void init_ctx(struct ctx_s* ctx, func_t f, unsigned int stack_size) {
 }
 
 void __attribute__ ((naked)) switch_to(struct ctx_s* ctx) {
+	// Sauvegarde des registres
+	__asm("push {r0-r12}");	
+
 	// Sauvegarde du contexte courant
 	__asm("mov %0, sp" : "=r"(current_ctx->sp));
 	__asm("mov %0, lr" : "=r"(current_ctx->link_register));
@@ -17,6 +20,9 @@ void __attribute__ ((naked)) switch_to(struct ctx_s* ctx) {
 	// Restauration du contexte
 	__asm("mov sp, %0" : : "r"(ctx->sp));
 	__asm("mov lr, %0" : : "r"(ctx->link_register));
+
+	// Restauration des registres
+	__asm("pop {r0-r12}");	
 
 	// Sauter à l'adresse de retour
 	__asm("bx lr");
