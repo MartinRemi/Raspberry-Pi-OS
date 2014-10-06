@@ -78,7 +78,6 @@ void elect() {
 	struct pcb_s* pcb = first;
 	if(pcb != NULL) {
 	// TODO: free all memory and handle pcb list (terminated process)
-	// TODO: Add idle process
 		/*do {
 			if(pcb != current_process) {
 				phyAlloc_free(pcb->ctx, pcb->size);
