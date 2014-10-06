@@ -1,8 +1,14 @@
 #include "sched.h"
+#include "hw.h"
 
 struct pcb_s* first = NULL;
 struct pcb_s* last = NULL;
 struct pcb_s* current_process = NULL;
+
+void idle()
+{
+	while(1);
+}
 
 void init_ctx(struct ctx_s* ctx, func_t f, unsigned int stack_size) {
 	ctx->sp = phyAlloc_alloc(stack_size) + stack_size - 14 * 4;
@@ -71,6 +77,13 @@ void end_current_process() {
 		a->next = newNext;
 	}*/
 	current_process->state = TERMINATED;
+	int allTerminated = 1;
+	struct pcb_s* pcb = first;
+	do {
+		allTerminated = (pcb->state != TERMINATED) ? 0 : 1;
+		pcb = pcb->next;
+	} while(pcb != first && allTerminated);
+	if(allTerminated) create_process(idle, NULL, STACK_SIZE);
 	ctx_switch();
 }
 
@@ -97,6 +110,8 @@ void elect() {
 }
 
 void start_sched() {
+	/*ENABLE_IRQ();
+	set_tick_and_enable_timer();*/
 }
 
 void __attribute__ ((naked)) ctx_switch() {
@@ -132,4 +147,8 @@ void __attribute__ ((naked)) ctx_switch() {
 			__asm("bx lr");
 		}
 	}	
+}
+
+void ctx_switch_from_irq() {
+	ctx_switch();
 }

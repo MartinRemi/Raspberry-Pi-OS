@@ -4,4 +4,3 @@ wh cmd 12
 target remote:1234
 b kmain
 source include.gdb
-b ctx_switch_from_irq

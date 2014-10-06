@@ -30,6 +30,8 @@ struct pcb_s {
 	process_state state;
 };
 
+void idle();
+
 void init_ctx(struct ctx_s* ctx, func_t f, unsigned int stack_size);
 
 void __attribute__ ((naked)) switch_to(struct ctx_s* ctx);
@@ -45,5 +47,7 @@ void elect();
 void start_sched();
 
 void __attribute__ ((naked)) ctx_switch();
+
+void ctx_switch_from_irq();
 
 #endif
