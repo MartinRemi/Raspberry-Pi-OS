@@ -1,4 +1,6 @@
-/*int
+/*
+INITIAL CODE
+int
 divide(int dividend,int divisor)
 {
 int result = 0;
@@ -23,7 +25,6 @@ volume = compute_volume(radius);
 return volume;
 }*/
 
-
 #include "sched.h"
 
 struct ctx_s ctx_ping;
@@ -43,6 +44,7 @@ void ping()
 void pong()
 {
 	int cpt = 1;
+
 	while ( 1 ) {
 		cpt+=2;
 		switch_to(&ctx_ping);
