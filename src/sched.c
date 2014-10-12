@@ -150,5 +150,9 @@ void __attribute__ ((naked)) ctx_switch() {
 }
 
 void ctx_switch_from_irq() {
+	__asm("sub lr, lr, #4");
+	__asm("srsdb sp!, #0x13");
+	__asm("cps #0x13");
 	ctx_switch();
+	__asm("RFE");
 }
