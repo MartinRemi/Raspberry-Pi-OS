@@ -91,7 +91,6 @@ void elect() {
 	struct pcb_s* pcb = first;
 	if(pcb != NULL) {
 	// TODO: free all memory and handle pcb list (terminated process)
-	// TODO: Add idle process
 		/*do {
 			if(pcb != current_process) {
 				phyAlloc_free(pcb->ctx, pcb->size);
@@ -99,6 +98,7 @@ void elect() {
 			pcb = pcb->next;
 		} while(pcb != first);*/
 	}
+
 	if(current_process != NULL) {
 		current_process = current_process->next;
 	} else {
@@ -110,8 +110,8 @@ void elect() {
 }
 
 void start_sched() {
-	/*ENABLE_IRQ();
-	set_tick_and_enable_timer();*/
+	ENABLE_IRQ();
+	set_tick_and_enable_timer();
 }
 
 void __attribute__ ((naked)) ctx_switch() {
