@@ -5,18 +5,18 @@ void funcA()
 {
 	int
 	cptA = 0;
-	while( cptA <=2 ) {
+	while( 1) {
 		cptA ++;
-		ctx_switch();
+		//ctx_switch();
 	}
 }
 
 void funcB()
 {
 	int cptB = 1;
-	while( cptB <= 4 ) {
+	while( 1) {
 		cptB += 2 ;
-		ctx_switch();
+		//ctx_switch();
 	}
 }
 //------------------------------------------------------------------------
@@ -28,6 +28,7 @@ int kmain (void)
 	create_process(funcB, NULL, STACK_SIZE);
 	create_process(funcA, NULL, STACK_SIZE);
 	start_sched();
-	ctx_switch();
+	//ctx_switch();
+	while(1);
 	return 0;
 }
